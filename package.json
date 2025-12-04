@@ -4,12 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {},
-  "keywords": ["playwright", "web", "automation", "typescript"],
+  "keywords": [
+    "playwright",
+    "web",
+    "automation",
+    "typescript"
+  ],
   "author": "ardizanki",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.57.0",
     "@types/node": "^24.10.1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
   }
 }

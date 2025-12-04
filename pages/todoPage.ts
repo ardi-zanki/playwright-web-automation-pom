@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
+import { BASE_URL } from '../utils/constants';
 
 export class TodoPage {
   readonly page: Page;
@@ -27,7 +28,7 @@ export class TodoPage {
 
   // Navigation
   async goto() {
-    await this.page.goto('https://demo.playwright.dev/todomvc');
+    await this.page.goto(BASE_URL);
   }
 
   // Actions
