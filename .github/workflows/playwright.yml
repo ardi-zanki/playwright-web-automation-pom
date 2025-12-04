@@ -15,6 +15,16 @@ jobs:
         node-version: lts/*
     - name: Install dependencies
       run: npm ci
+    - name: Setup environment variables
+      run: |
+        if [ -f .env.example ]; then
+          cp .env.example .env
+          echo ".env created from .env.example"
+          cat .env
+        else
+          echo ".env.example not found!"
+          exit 1
+        fi
     - name: Get Playwright version
       id: playwright-version
       run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> $GITHUB_OUTPUT
