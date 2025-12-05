@@ -12,7 +12,7 @@
 
 | Test Suite | Total Tests | Description |
 |------------|-------------|-------------|
-| New Todo | 3 | Creating new todo items |
+| New Todo | 4 | Creating new todo items |
 | Mark all as completed | 3 | Bulk complete/uncomplete operations |
 | Item | 3 | Individual item operations |
 | Editing | 5 | Edit functionality and validation |
@@ -20,7 +20,7 @@
 | Clear completed button | 3 | Remove completed items |
 | Persistence | 1 | Data persistence validation |
 | Routing | 5 | Navigation and filtering |
-| **Total** | **24** | **All test scenarios** |
+| **Total** | **25** | **All test scenarios** |
 
 ---
 
@@ -669,14 +669,14 @@ fixtures/
 ```
 tests/
 └── demo-todo-app.spec.ts
-    ├── New Todo (3 tests)
+    ├── New Todo (4 tests)
     ├── Mark all as completed (3 tests)
     ├── Item (3 tests)
     ├── Editing (5 tests)
     ├── Counter (1 test)
     ├── Clear completed button (3 tests)
     ├── Persistence (1 test)
-    └── Routing (6 tests)
+    └── Routing (5 tests)
 ```
 
 ---

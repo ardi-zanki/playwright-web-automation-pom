@@ -2,7 +2,7 @@
 
 Playwright Test is an end-to-end test framework for modern web apps. It bundles test runner, assertions, isolation, parallelization and rich tooling.
 
-## 🚀 Key Features
+## Key Features
 
 - Supports **Chromium**, **WebKit**, and **Firefox** browsers
 - Cross-platform: Windows, Linux, and macOS
@@ -15,14 +15,14 @@ Playwright Test is an end-to-end test framework for modern web apps. It bundles 
 - Reusable utility functions
 - Environment variable configuration
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Node.js**: latest 22.x, or 24.x
 - **Operating System**: 
   - Windows 11 or later
   - macOS 14 or later
 
-## 🔧 Installation
+## Installation
 
 Initialize Playwright in your project:
 
@@ -36,11 +36,7 @@ During installation, you will be prompted to choose:
 - Add a GitHub Actions workflow (recommended for CI)
 - Install Playwright browsers (default: yes)
 
-### Alternative: VS Code Extension
-
-You can also create and run tests using the [VS Code Extension](https://playwright.dev/docs/getting-started-vscode).
-
-## 📂 Project Structure
+## Project Structure
 
 This project follows best practices with a well-organized structure:
 
@@ -49,6 +45,8 @@ playwright-web-automation-pom/
 ├── .github/
 │   └── workflows/
 │       └── playwright.yml        # GitHub Actions CI/CD
+├── docs/
+│   └── TEST_CASES.md             # Test case documentation
 ├── fixtures/
 │   └── todo-fixtures.ts          # Custom fixtures (auto-init)
 ├── pages/
@@ -67,6 +65,8 @@ playwright-web-automation-pom/
 ### Directory Breakdown
 
 - **`.github/workflows/`** - GitHub Actions workflow for CI/CD automation
+- **`docs/`** - Project documentation
+  - `test_cases.md` - Comprehensive test case documentation covering all 25 test scenarios with detailed descriptions, preconditions, steps, and expected results
 - **`fixtures/`** - Contains test data, constants, and custom fixtures
   - `todo-fixtures.ts` - Custom fixtures with auto-initialization
 - **`pages/`** - Page Object Models for maintainable test structure
@@ -77,7 +77,7 @@ playwright-web-automation-pom/
   - `constants.ts` - Test data constants and environment variables
 - **`playwright.config.ts`** - Configuration for browsers, timeouts, retries, projects, and reporters
 
-## ⚙️ Environment Setup
+## Environment Setup
 
 This project uses environment variables for configuration flexibility.
 
@@ -97,13 +97,13 @@ This project uses environment variables for configuration flexibility.
 
 ### Environment Variables
 
-| Variable | Description            | Default                               |
-|----------|------------------------|---------------------------------------|
+| Variable | Description | Default |
+|----------|-------------|---------|
 | `BASE_URL` | Application base URL | `https://demo.playwright.dev/todomvc` |
 
 **Note:** Team members cloning this project must create their own `.env` file from `.env.example`.
 
-## 🏗️ Architecture Patterns
+## Architecture Patterns
 
 ### Page Object Model (POM)
 
@@ -218,7 +218,7 @@ npx playwright test --ui
 
 For more details on filtering, headed mode, sharding and retries, see [Running Tests](https://playwright.dev/docs/running-tests) documentation.
 
-## 🎨 UI Mode
+## UI Mode
 
 Run tests with UI Mode for watch mode, live step view, time travel debugging and more:
 
@@ -233,7 +233,7 @@ UI Mode provides an interactive interface to:
 - ✅ View network activity
 - ✅ Debug with step-by-step execution
 
-## 📊 HTML Test Report
+## HTML Test Report
 
 After test execution, the HTML Reporter provides a dashboard filterable by browser, passed, failed, skipped, flaky tests and more.
 
@@ -249,7 +249,7 @@ Click on any test to inspect:
 - 🔍 Execution steps with timing
 - 📎 Attachments and logs
 
-## 🐛 Debugging
+## Debugging
 
 ### Using Debug Mode
 
@@ -263,12 +263,6 @@ This opens Playwright Inspector with:
 - Network activity
 - DOM snapshots
 
-### Using VS Code Debugger
-
-1. Set breakpoints in your test code
-2. Run tests in debug mode from VS Code
-3. Use VS Code debugging features
-
 ### Debugging in UI Mode
 
 ```bash
@@ -277,7 +271,7 @@ npx playwright test --ui
 
 UI Mode is the recommended way to debug, offering the best experience.
 
-## 🔄 Updating Playwright
+## Updating Playwright
 
 Update Playwright and download new browser binaries:
 
@@ -292,7 +286,7 @@ npx playwright install --with-deps
 npx playwright --version
 ```
 
-## 🧩 Writing Tests
+## Writing Tests
 
 ### Example: Using Custom Fixtures
 
@@ -317,7 +311,7 @@ test('verify base URL', async ({ todoPage }) => {
 });
 ```
 
-## 🔄 CI/CD Integration
+## CI/CD Integration
 
 This project includes a GitHub Actions workflow that automatically:
 - ✅ Runs tests on push and pull requests
@@ -328,42 +322,7 @@ This project includes a GitHub Actions workflow that automatically:
 
 The workflow is configured in `.github/workflows/playwright.yml`.
 
-## 🎯 Common Commands Cheatsheet
-
-```bash
-# Run all tests
-npx playwright test
-
-# Run in headed mode
-npx playwright test --headed
-
-# Run specific browser
-npx playwright test --project=chromium
-
-# Run specific test file
-npx playwright test tests/demo-todo-app.spec.ts
-
-# Run tests matching title
-npx playwright test -g "should add todo"
-
-# Debug mode
-npx playwright test --debug
-
-# UI mode
-npx playwright test --ui
-
-# Show report
-npx playwright show-report
-
-# List tests
-npx playwright test --list
-
-# Update Playwright
-npm install -D @playwright/test@latest
-npx playwright install --with-deps
-```
-
-## 📚 Documentation
+## Documentation
 
 For complete documentation, visit:
 - [Playwright Documentation](https://playwright.dev/docs/intro)
@@ -373,6 +332,7 @@ For complete documentation, visit:
 - [Debugging](https://playwright.dev/docs/debug)
 - [Test Assertions](https://playwright.dev/docs/test-assertions)
 
-## 📝 Additional Resources
+## Additional Resources
 
+- [Test Cases Documentation](./docs/TEST_CASES.md) - Comprehensive test case specifications
 - [GitHub Actions Workflow](./.github/workflows/playwright.yml) - CI/CD configuration
