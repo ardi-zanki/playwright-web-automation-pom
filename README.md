@@ -45,6 +45,10 @@ playwright-web-automation-pom/
 ├── .github/
 │   └── workflows/
 │       └── playwright.yml        # GitHub Actions CI/CD
+├── config/
+│   └── environment.ts            # Environment configuration
+├── data/
+│   └── todos.ts                  # Test data constants
 ├── docs/
 │   └── TEST_CASES.md             # Test case documentation
 ├── fixtures/
@@ -53,8 +57,6 @@ playwright-web-automation-pom/
 │   └── todoPage.ts               # Page Object Model
 ├── tests/
 │   └── demo-todo-app.spec.ts     # Test specifications
-├── utils/
-│   └── constants.ts              # Constants & environment variables
 ├── .env.example                  # Environment variables template
 ├── .env                          # Environment variables (DO NOT COMMIT)
 ├── .gitignore                    # Git ignore rules
@@ -65,16 +67,18 @@ playwright-web-automation-pom/
 ### Directory Breakdown
 
 - **`.github/workflows/`** - GitHub Actions workflow for CI/CD automation
+- **`config/`** - Configuration files
+  - `environment.ts` - Environment variables and base URL configuration
+- **`data/`** - Test data constants
+  - `todos.ts` - Todo test data constants
 - **`docs/`** - Project documentation
-  - `test_cases.md` - Comprehensive test case documentation covering all 25 test scenarios with detailed descriptions, preconditions, steps, and expected results
-- **`fixtures/`** - Contains test data, constants, and custom fixtures
+  - `TEST_CASES.md` - Comprehensive test case documentation covering all 25 test scenarios with detailed descriptions, preconditions, steps, and expected results
+- **`fixtures/`** - Custom fixtures for test setup
   - `todo-fixtures.ts` - Custom fixtures with auto-initialization
 - **`pages/`** - Page Object Models for maintainable test structure
   - `todoPage.ts` - TodoMVC page object with all locators and actions
 - **`tests/`** - Test specification files
   - `demo-todo-app.spec.ts` - Todo MVC test cases
-- **`utils/`** - Reusable utility functions and constants
-  - `constants.ts` - Test data constants and environment variables
 - **`playwright.config.ts`** - Configuration for browsers, timeouts, retries, projects, and reporters
 
 ## Environment Setup
@@ -143,20 +147,23 @@ test('my test', async ({ todoPage }) => {
 
 ### Constants & Environment Variables
 
-Test data and configuration are centralized:
+Test data and configuration are separated into dedicated modules:
 
 ```typescript
-// utils/constants.ts
+// config/environment.ts
 import dotenv from 'dotenv';
 dotenv.config();
 
+export const BASE_URL = process.env.BASE_URL || 'https://demo.playwright.dev/todomvc';
+```
+
+```typescript
+// data/todos.ts
 export const TODO_ITEMS = [
   'buy some cheese',
   'feed the cat',
   'book a doctors appointment'
 ] as const;
-
-export const BASE_URL = process.env.BASE_URL || 'https://demo.playwright.dev/todomvc';
 ```
 
 ## 🧪 Running Tests
@@ -292,7 +299,7 @@ npx playwright --version
 
 ```typescript
 import { test, expect } from '../fixtures/todo-fixtures';
-import { TODO_ITEMS } from '../utils/constants';
+import { TODO_ITEMS } from '../data/todos';
 
 test('add new todo', async ({ todoPage }) => {
   await todoPage.addTodo(TODO_ITEMS[0]);
@@ -303,7 +310,8 @@ test('add new todo', async ({ todoPage }) => {
 ### Example: Using Constants
 
 ```typescript
-import { TODO_ITEMS, BASE_URL } from '../utils/constants';
+import { TODO_ITEMS } from '../data/todos';
+import { BASE_URL } from '../config/environment';
 
 test('verify base URL', async ({ todoPage }) => {
   await todoPage.goto();
