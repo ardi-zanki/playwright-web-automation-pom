@@ -13,6 +13,7 @@ Playwright Test is an end-to-end test framework for modern web apps. It bundles 
 - Built-in **Page Object Model (POM)** pattern
 - Custom fixtures for better test organization
 - Reusable utility functions
+- Environment variable configuration
 
 ## 📋 Prerequisites
 
@@ -44,33 +45,63 @@ You can also create and run tests using the [VS Code Extension](https://playwrig
 This project follows best practices with a well-organized structure:
 
 ```
-playwright.config.ts          # Test configuration
-package.json
-package-lock.json
-tests/
-  fixtures/
-    todo-fixtures.ts          # Test data constants
-    test-setup.ts             # Custom fixtures (auto-init)
-  pages/
-    todoPage.ts               # Page Object Model
-  utils/                      # Utility functions
-    commonUtils.ts            # General utilities
-    dateUtils.ts              # Date/time helpers
-  demo-todo-app.spec.ts       # Test specifications
+playwright-web-automation-pom/
+├── .github/
+│   └── workflows/
+│       └── playwright.yml        # GitHub Actions CI/CD
+├── fixtures/
+│   └── todo-fixtures.ts          # Custom fixtures (auto-init)
+├── pages/
+│   └── todoPage.ts               # Page Object Model
+├── tests/
+│   └── demo-todo-app.spec.ts     # Test specifications
+├── utils/
+│   └── constants.ts              # Constants & environment variables
+├── .env.example                  # Environment variables template
+├── .env                          # Environment variables (DO NOT COMMIT)
+├── .gitignore                    # Git ignore rules
+├── package.json                  # Dependencies and scripts
+└── playwright.config.ts          # Test configuration
 ```
 
 ### Directory Breakdown
 
-- **`playwright.config.ts`** - Configuration for browsers, timeouts, retries, projects, and reporters
-- **`tests/fixtures/`** - Contains test data, constants, and custom fixtures
-  - `todo-fixtures.ts` - Shared test data
-  - `test-setup.ts` - Custom fixtures with auto-initialization
-- **`tests/pages/`** - Page Object Models for maintainable test structure
+- **`.github/workflows/`** - GitHub Actions workflow for CI/CD automation
+- **`fixtures/`** - Contains test data, constants, and custom fixtures
+  - `todo-fixtures.ts` - Custom fixtures with auto-initialization
+- **`pages/`** - Page Object Models for maintainable test structure
   - `todoPage.ts` - TodoMVC page object with all locators and actions
-- **`tests/utils/`** - Reusable utility functions
-  - `commonUtils.ts` - Random generators, retry logic, string helpers
-  - `dateUtils.ts` - Date formatting, offset calculations
 - **`tests/`** - Test specification files
+  - `demo-todo-app.spec.ts` - Todo MVC test cases
+- **`utils/`** - Reusable utility functions and constants
+  - `constants.ts` - Test data constants and environment variables
+- **`playwright.config.ts`** - Configuration for browsers, timeouts, retries, projects, and reporters
+
+## ⚙️ Environment Setup
+
+This project uses environment variables for configuration flexibility.
+
+### Setup Steps
+
+1. **Copy the environment template:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Edit `.env` with your configuration:**
+   ```env
+   BASE_URL=https://demo.playwright.dev/todomvc
+   ```
+
+3. **The `.env` file is already in `.gitignore`** - never commit it!
+
+### Environment Variables
+
+| Variable | Description            | Default                               |
+|----------|------------------------|---------------------------------------|
+| `BASE_URL` | Application base URL | `https://demo.playwright.dev/todomvc` |
+
+**Note:** Team members cloning this project must create their own `.env` file from `.env.example`.
 
 ## 🏗️ Architecture Patterns
 
@@ -79,7 +110,7 @@ tests/
 This project uses the Page Object Model pattern for better maintainability:
 
 ```typescript
-// tests/pages/todoPage.ts
+// pages/todoPage.ts
 export class TodoPage {
   readonly page: Page;
   readonly newTodoInput: Locator;
@@ -110,18 +141,22 @@ test('my test', async ({ todoPage }) => {
 });
 ```
 
-### Utility Functions
+### Constants & Environment Variables
 
-Reusable utilities for common operations:
+Test data and configuration are centralized:
 
 ```typescript
-import { generateRandomTodo, pluralize } from './utils/commonUtils';
-import { getCurrentTimestamp, formatDate } from './utils/dateUtils';
+// utils/constants.ts
+import dotenv from 'dotenv';
+dotenv.config();
 
-test('example', async ({ todoPage }) => {
-  const randomTodo = generateRandomTodo();
-  console.log(`Created at: ${getCurrentTimestamp()}`);
-});
+export const TODO_ITEMS = [
+  'buy some cheese',
+  'feed the cat',
+  'book a doctors appointment'
+] as const;
+
+export const BASE_URL = process.env.BASE_URL || 'https://demo.playwright.dev/todomvc';
 ```
 
 ## 🧪 Running Tests
@@ -163,7 +198,7 @@ npx playwright test -g "should allow me to add todo items"
 
 **Run tests in a specific folder:**
 ```bash
-npx playwright test tests/fixtures/
+npx playwright test tests/
 ```
 
 **List all available tests:**
@@ -262,42 +297,36 @@ npx playwright --version
 ### Example: Using Custom Fixtures
 
 ```typescript
-import { test, expect } from './fixtures/test-setup';
-import { TODO_ITEMS } from './fixtures/todo-fixtures';
+import { test, expect } from '../fixtures/todo-fixtures';
+import { TODO_ITEMS } from '../utils/constants';
 
 test('add new todo', async ({ todoPage }) => {
   await todoPage.addTodo(TODO_ITEMS[0]);
-  await todoPage.assertTodoTexts([TODO_ITEMS[0]]);
+  await todoPage.expectTodoTexts([TODO_ITEMS[0]]);
 });
 ```
 
-### Example: Using Utilities
+### Example: Using Constants
 
 ```typescript
-import { generateRandomTodo } from './utils/commonUtils';
-import { getCurrentTimestamp } from './utils/dateUtils';
+import { TODO_ITEMS, BASE_URL } from '../utils/constants';
 
-test('add random todo', async ({ todoPage }) => {
-  const todo = generateRandomTodo();
-  console.log(`Adding: ${todo} at ${getCurrentTimestamp()}`);
-  
-  await todoPage.addTodo(todo);
-  await todoPage.assertTodoCount(1);
+test('verify base URL', async ({ todoPage }) => {
+  await todoPage.goto();
+  expect(todoPage.page.url()).toBe(BASE_URL);
 });
 ```
 
-## 📦 Best Practices
+## 🔄 CI/CD Integration
 
-This project follows Playwright best practices:
+This project includes a GitHub Actions workflow that automatically:
+- ✅ Runs tests on push and pull requests
+- ✅ Sets up environment variables from `.env.example`
+- ✅ Caches Playwright browsers for faster execution
+- ✅ Uploads test reports as artifacts
+- ✅ Runs tests in parallel
 
-✅ **Page Object Model** - Centralized locators and actions  
-✅ **Custom Fixtures** - Reusable setup with dependency injection  
-✅ **Utility Functions** - DRY principle for common operations  
-✅ **Type Safety** - Full TypeScript support  
-✅ **Test Isolation** - Each test runs independently  
-✅ **Parallel Execution** - Tests run concurrently by default  
-✅ **Auto-waiting** - Built-in smart waiting for elements  
-✅ **Assertions** - Web-first assertions with auto-retry  
+The workflow is configured in `.github/workflows/playwright.yml`.
 
 ## 🎯 Common Commands Cheatsheet
 
@@ -343,3 +372,7 @@ For complete documentation, visit:
 - [Fixtures](https://playwright.dev/docs/test-fixtures)
 - [Debugging](https://playwright.dev/docs/debug)
 - [Test Assertions](https://playwright.dev/docs/test-assertions)
+
+## 📝 Additional Resources
+
+- [GitHub Actions Workflow](./.github/workflows/playwright.yml) - CI/CD configuration
