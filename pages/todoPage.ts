@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { BASE_URL } from '../utils/constants';
+import { BASE_URL } from '../config/environment';
 
 export class TodoPage {
   readonly page: Page;

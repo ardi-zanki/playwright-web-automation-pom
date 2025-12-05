@@ -1,5 +1,5 @@
 import { test, expect } from '../fixtures/todo-fixtures';
-import { TODO_ITEMS } from '../utils/constants';
+import { TODO_ITEMS } from '../data/todos';
 
 test.describe('New Todo', () => {
   test('should allow me to add todo items', async ({ todoPage }) => {
