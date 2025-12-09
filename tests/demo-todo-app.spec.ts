@@ -2,15 +2,29 @@ import { test, expect } from '../fixtures/todo-fixtures';
 import { TODO_ITEMS } from '../data/todos';
 
 test.describe('New Todo', () => {
-  test('should allow me to add todo items', async ({ todoPage }) => {
+  test('should allow me to add a single todo item', async ({ todoPage }) => {
     // Create 1st todo
     await todoPage.addTodo(TODO_ITEMS[0]);
     await todoPage.expectTodoTexts([TODO_ITEMS[0]]);
+    
+    await todoPage.expectInputToBeEmpty();
+    await todoPage.expectTodoCountText('1 item left');
+    await todoPage.checkNumberOfTodosInLocalStorage(1);
+  });
 
+  test('should allow me to add multiple todo items', async ({ todoPage }) => {
+    // Create 1st todo
+    await todoPage.addTodo(TODO_ITEMS[0]);
+    await todoPage.expectTodoTexts([TODO_ITEMS[0]]);
+    
+    await todoPage.expectInputToBeEmpty();
+    
     // Create 2nd todo
     await todoPage.addTodo(TODO_ITEMS[1]);
     await todoPage.expectTodoTexts([TODO_ITEMS[0], TODO_ITEMS[1]]);
 
+    await todoPage.expectInputToBeEmpty();
+    await todoPage.expectTodoCountText('2 items left');
     await todoPage.checkNumberOfTodosInLocalStorage(2);
   });
 
